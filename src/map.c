@@ -16,13 +16,13 @@ void	init_map(void *first_map, size_t size, char type)
 t_map *create_type_map(size_t size, char type){
     size_t	map_size;
     void	*ptr_map;
-
     if (type == LARGE)
         map_size = size * sizeof(t_chunk);
     else
         map_size = calculate_map_size(size);
 
     ptr_map = allocate_memory(map_size);
+	
     if (ptr_map != NULL)
 		init_map(ptr_map, map_size, type);
 	return (ptr_map);

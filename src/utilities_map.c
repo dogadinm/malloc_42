@@ -47,15 +47,15 @@ t_map	*find_map(t_map *first_map, size_t size){
 size_t	number_of_pages(size_t page_size, size_t chunk_size){
 	size_t	page_numbers;
 	size_t	chunks_numbers;
-    size_t  chunks_per_page;
 
 	page_numbers = 0;
 	chunks_numbers = 0;
-    chunks_per_page = page_size / chunk_size;
+
 	if (chunk_size > 0 && page_size > 0){
 		while (chunks_numbers < MIN_CHUNKS_PER_MAP){
 			page_numbers++;
-			chunks_numbers = page_numbers * chunks_per_page;
+			chunks_numbers = page_numbers * page_size / chunk_size;
+			// printf("page_numbers: %zu, chunks_numbers: %zu\n", page_numbers, chunks_numbers);
 		}
 	}
 	return (page_numbers);
@@ -78,6 +78,7 @@ size_t	calculate_map_size(size_t size){
 
     page_size = getpagesize();
 	page_numbers = number_of_pages(page_size, sizeof(t_chunk) + size);
+
 	map_size = page_numbers * page_size;
 	return (map_size);
 }

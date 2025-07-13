@@ -46,7 +46,7 @@ void test_malloc_free()
 {
     printf("=== test_malloc_free ===\n");
 
-    size_t size = 100;
+    size_t size = 1026;
     char *ptr = (char *)my_malloc(size);
 
     if (ptr == NULL)

@@ -4,6 +4,7 @@
 # include <sys/mman.h>
 # include <unistd.h>
 # include <stdint.h>
+# include <stdio.h>
 
 # define TINY 'T'
 # define SMALL 'S'
@@ -53,6 +54,8 @@ void	release_empty_zone(t_map *map_origin);
 t_bool	check_type_map(t_map *map, size_t size);
 t_bool	check_chunk_exist(t_chunk *addr_chunk);
 void	release_chunk(t_chunk *chunk);
+void	show_alloc_mem(void);
+
 
 /* chunk */
 t_chunk	*init_chunk(t_map *map, void *chunk_ptr, size_t data_size);
@@ -60,5 +63,13 @@ t_chunk	*get_chunk(t_chunk *chunk, t_map *first_map, size_t size);
 t_chunk	*exist_free_chunk(t_chunk *chunk, size_t data_size);
 t_chunk	*get_last_chunk(t_map *map);
 void	set_chunk(t_chunk *chunk, size_t data_size);
+
+
+void	ft_putstr(char const *s);
+void	ft_putnbr(int n);
+void	ft_putchar(char c);
+void	ft_puthexa(uint64_t nb);
+void	ft_bzero(void *s, size_t n);
+void	*ft_memset(void *b, int c, size_t len);
 
 #endif

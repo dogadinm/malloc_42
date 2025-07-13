@@ -36,6 +36,13 @@ SRC = malloc.c \
 	map.c \
 	utilities_chunk.c \
 	utilities_map.c \
+	show_alloc_mem.c \
+	ft_putstr.c \
+	ft_putnbr.c \
+	ft_putchar.c \
+	ft_puthexa.c \
+	ft_bzero.c \
+	ft_memset.c \
 
 
 
