@@ -27,7 +27,7 @@ t_chunk	*exist_free_chunk(t_chunk *chunk, size_t data_size){
 	return (current_chunk);
 }
 
-t_chunk	*last_chunk(t_map *map){
+t_chunk	*get_last_chunk(t_map *map){
 	t_chunk *current_chunk;
 
 	current_chunk = map->first_chunk;

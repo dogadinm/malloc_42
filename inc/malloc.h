@@ -1,8 +1,8 @@
 #ifndef MALLOC_H
-# define MALLOC_H
+#define MALLOC_H
 
 # include <sys/mman.h>
-# include <unist.h>
+# include <unistd.h>
 # include <stdint.h>
 
 # define TINY 'T'
@@ -18,7 +18,7 @@
 
 typedef unsigned int	t_bool;
 
-void			*g_first_addr;
+extern void *g_first_addr;
 
 typedef struct s_chunk {
 	void         *parent_map;
@@ -47,7 +47,7 @@ t_map 	*init_first_map(size_t size);
 size_t	calculate_map_size(size_t size);
 size_t	calculate_map_size(size_t size);
 void	*allocate_memory(size_t size);
-
+void 	*my_malloc(size_t size);
 
 
 
@@ -55,5 +55,7 @@ void	*allocate_memory(size_t size);
 t_chunk	*init_chunk(t_map *map, void *chunk_ptr, size_t data_size);
 t_chunk	*get_chunk(t_chunk *chunk, t_map *first_map, size_t size);
 t_chunk	*exist_free_chunk(t_chunk *chunk, size_t data_size);
-t_chunk	*last_chunk(t_map *map);
+t_chunk	*get_last_chunk(t_map *map);
 void	set_chunk(t_chunk *chunk, size_t data_size);
+
+#endif

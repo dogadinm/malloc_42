@@ -5,11 +5,11 @@ t_bool	available_map_space(t_map *map, size_t size_data_chunk){
 	void	*max_addr;
 	void	*next_addr;
 
-	last_chunk = last_chunk(map);
+	last_chunk = get_last_chunk(map);
 	max_addr = map->map_origin + map->total_size;
 	next_addr = (void*)last_chunk + sizeof(t_chunk)
 							+ last_chunk->data_size + sizeof(t_chunk)
-							+ size_data_block;
+							+ size_data_chunk;
 	if (next_addr > max_addr)
 		return (FALSE);
 	return (TRUE);
@@ -20,10 +20,10 @@ t_bool	check_type_map(t_map *map, size_t size){
 		if (map->type == 'T' && size <= TINY_CHUNK)
 			return (TRUE);
 		else if (map->type == 'S'
-						&& size_data > TINY_CHUNK
-						&& size_data <= SMALL_CHUNK)
+						&& size > TINY_CHUNK
+						&& size <= SMALL_CHUNK)
 			return (TRUE);
-		else if (map->type == 'L' && size_data > SMALL_CHUNK)
+		else if (map->type == 'L' && size > SMALL_CHUNK)
 			return (TRUE);
 		else
 			return (FALSE);

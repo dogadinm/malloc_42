@@ -13,19 +13,6 @@ void	init_map(void *first_map, size_t size, char type)
 	map->type = type;
 }
 
-t_map *create_map(size_t size){
-    t_map *ptr_map;
-
-    if (size <= TINY_CHUNK)
-        ptr_map = create_type_map(TINY_CHUNK, TINY);
-    else if (size <= SMALL_CHUNK)
-        ptr_map = create_type_map(SMALL_CHUNK, SMALL);
-    else
-        ptr_map = create_type_map(size, LARGE);
-
-    return (ptr_map)
-}
-
 t_map *create_type_map(size_t size, char type){
     size_t	map_size;
     void	*ptr_map;
@@ -39,6 +26,19 @@ t_map *create_type_map(size_t size, char type){
     if (ptr_map != NULL)
 		init_map(ptr_map, map_size, type);
 	return (ptr_map);
+}
+
+t_map *create_map(size_t size){
+    t_map *ptr_map;
+
+    if (size <= TINY_CHUNK)
+        ptr_map = create_type_map(TINY_CHUNK, TINY);
+    else if (size <= SMALL_CHUNK)
+        ptr_map = create_type_map(SMALL_CHUNK, SMALL);
+    else
+        ptr_map = create_type_map(size, LARGE);
+
+    return (ptr_map);
 }
 
 t_map	*new_map(t_map *map, size_t size_data){
@@ -65,10 +65,10 @@ t_map *init_first_map(size_t size){
 	first_map = (t_map*)g_first_addr;
 	if (first_map == NULL){
 		first_map = create_map(size);
-		if (first_map == NULL):
-			return (NULL)
+		if (first_map == NULL)
+			return (NULL);
 		g_first_addr = first_map;
-		init_chunk(first_zone, first_map->first_chunk, size);
+		init_chunk(first_map, first_map->first_chunk, size);
 	}
-	return (first_map)
+	return (first_map);
 }
