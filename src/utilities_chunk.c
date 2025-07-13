@@ -36,3 +36,27 @@ t_chunk	*get_last_chunk(t_map *map){
 	}
 	return (current_chunk);
 }
+
+t_bool	check_chunk_exist(t_chunk *addr_chunk)
+{
+	t_map	*current_map;
+	t_chunk	*current_chunk;
+	t_bool	is_exist;
+
+	is_exist = FALSE;
+	current_map = (t_map *)g_first_addr;
+	while (current_map != NULL)
+	{
+		current_chunk = current_map->first_chunk;
+		while (current_chunk != NULL)
+		{
+			if (current_chunk == addr_chunk)
+			{
+				is_exist = TRUE;
+			}
+			current_chunk = (t_chunk*)current_chunk->next_chunk;
+		}
+		current_map = (t_map*)current_map->map_next;
+	}
+	return (is_exist);
+}

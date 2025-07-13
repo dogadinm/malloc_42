@@ -29,6 +29,9 @@ endif
 #_____________FILES____________#
 
 SRC = malloc.c \
+	relloc.c \
+	free.c \
+	delete_chunk.c \
 	chunk.c \
 	map.c \
 	utilities_chunk.c \

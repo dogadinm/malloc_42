@@ -19,6 +19,11 @@ void	set_chunk(t_chunk *chunk, size_t data_size)
 	chunk->available = FALSE;
 }
 
+void	release_chunk(t_chunk *chunk)
+{
+	chunk->available = TRUE;
+}
+
 
 t_chunk	*add_chunk(t_map *map, size_t size_data)
 {
