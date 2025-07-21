@@ -5,7 +5,7 @@
 
 // int main(void)
 // {
-//     char *s = my_malloc(10);
+//     char *s = malloc(10);
 //     if (s == NULL)
 //     {
 //         printf("malloc failed\n");
@@ -15,7 +15,7 @@
 //     strcpy(s, "Hello");
 //     printf("Before realloc: %s\n", s);
 
-//     char *new_s = my_realloc(s, 20);
+//     char *new_s = realloc(s, 20);
 //     if (new_s == NULL)
 //     {
 //         printf("realloc failed\n");
@@ -35,23 +35,23 @@
 #include <stdlib.h>
 #include "./inc/malloc.h"
 // подключи заголовок с твоими функциями
-// #include "my_malloc.h"
+// #include "malloc.h"
 
 // // заглушки на случай, если тестируешь system malloc
-// #define my_malloc malloc
-// #define my_free free
-// #define my_realloc realloc
+// #define malloc malloc
+// #define free free
+// #define realloc realloc
 
 void test_malloc_free()
 {
     printf("=== test_malloc_free ===\n");
 
     size_t size = 1026;
-    char *ptr = (char *)my_malloc(size);
+    char *ptr = (char *)malloc(size);
 
     if (ptr == NULL)
     {
-        printf("FAIL: my_malloc returned NULL\n");
+        printf("FAIL: malloc returned NULL\n");
         return;
     }
 
@@ -67,7 +67,7 @@ void test_malloc_free()
         }
     }
 
-    my_free(ptr);
+    free(ptr);
     printf("PASS: malloc/free test\n\n");
 }
 
@@ -78,20 +78,20 @@ void test_realloc_expand()
     size_t size1 = 50;
     size_t size2 = 150;
 
-    char *ptr = (char *)my_malloc(size1);
+    char *ptr = (char *)malloc(size1);
     if (!ptr)
     {
-        printf("FAIL: my_malloc returned NULL\n");
+        printf("FAIL: malloc returned NULL\n");
         return;
     }
 
     memset(ptr, 0x33, size1);
 
-    char *ptr2 = (char *)my_realloc(ptr, size2);
+    char *ptr2 = (char *)realloc(ptr, size2);
     if (!ptr2)
     {
-        printf("FAIL: my_realloc returned NULL\n");
-        my_free(ptr);
+        printf("FAIL: realloc returned NULL\n");
+        free(ptr);
         return;
     }
 
@@ -109,7 +109,7 @@ void test_realloc_expand()
 
     if (ok)
         printf("PASS: realloc expanded and preserved data\n");
-    my_free(ptr2);
+    free(ptr2);
     printf("\n");
 }
 
@@ -120,20 +120,20 @@ void test_realloc_shrink()
     size_t size1 = 200;
     size_t size2 = 50;
 
-    char *ptr = (char *)my_malloc(size1);
+    char *ptr = (char *)malloc(size1);
     if (!ptr)
     {
-        printf("FAIL: my_malloc returned NULL\n");
+        printf("FAIL: malloc returned NULL\n");
         return;
     }
 
     memset(ptr, 0x77, size1);
 
-    char *ptr2 = (char *)my_realloc(ptr, size2);
+    char *ptr2 = (char *)realloc(ptr, size2);
     if (!ptr2)
     {
-        printf("FAIL: my_realloc returned NULL\n");
-        my_free(ptr);
+        printf("FAIL: realloc returned NULL\n");
+        free(ptr);
         return;
     }
 
@@ -151,7 +151,7 @@ void test_realloc_shrink()
     if (ok)
         printf("PASS: realloc shrink test\n");
 
-    my_free(ptr2);
+    free(ptr2);
     printf("\n");
 }
 
@@ -159,15 +159,15 @@ void test_malloc_zero()
 {
     printf("=== test_malloc_zero ===\n");
 
-    char *ptr = (char *)my_malloc(0);
+    char *ptr = (char *)malloc(0);
     if (ptr == NULL)
     {
-        printf("PASS: my_malloc(0) returned NULL (allowed)\n");
+        printf("PASS: malloc(0) returned NULL (allowed)\n");
     }
     else
     {
-        printf("PASS: my_malloc(0) returned non-NULL pointer (also allowed)\n");
-        my_free(ptr);
+        printf("PASS: malloc(0) returned non-NULL pointer (also allowed)\n");
+        free(ptr);
     }
     printf("\n");
 }

@@ -1,7 +1,7 @@
 #include "malloc.h"
 void *g_first_addr = NULL;
 
-void *my_malloc(size_t size){
+void *malloc(size_t size){
     t_map	*first_map;
     t_chunk	*chunk;
 

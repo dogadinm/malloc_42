@@ -1,6 +1,6 @@
 #include "malloc.h"
 
-extern void	my_free(void *ptr)
+extern void	free(void *ptr)
 {
 	t_chunk	*chunk;
 	t_map	*map;

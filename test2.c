@@ -6,9 +6,9 @@
 int main()
 {
     printf("==== Test #1 ====\n");
-    char *a = my_malloc(32);
-    char *b = my_malloc(128);
-    char *c = my_malloc(48847);
+    char *a = malloc(32);
+    char *b = malloc(128);
+    char *c = malloc(48847);
 
     strcpy(a, "Hello tiny!");
     strcpy(b, "This is small allocation.");

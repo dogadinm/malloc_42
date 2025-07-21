@@ -1,0 +1,2 @@
+ cc ./test/test12.c libft_malloc.so  -o test12
+ LD_LIBRARY_PATH=. valgrind ./test12
