@@ -1,7 +1,6 @@
 #include "malloc.h"
 
-void	display_octets(t_chunk *chunk)
-{
+void	display_octets(t_chunk *chunk){
 	size_t size;
 
 	size = chunk->data_size;
@@ -9,13 +8,11 @@ void	display_octets(t_chunk *chunk)
 	ft_putstr(" octets");
 }
 
-void	show_memory_block(void *addr)
-{
+void	show_memory_block(void *addr){
 	t_chunk *chunk;
 
 	chunk = (t_chunk*)addr;
-	while (chunk != NULL)
-	{
+	while (chunk != NULL){
 		ft_puthexa((uint64_t)chunk->ptr_data);
 		ft_putstr(" - ");
 		ft_puthexa((uint64_t)chunk->ptr_data + (uint64_t)chunk->data_size);
@@ -26,13 +23,11 @@ void	show_memory_block(void *addr)
 	}
 }
 
-void	show_memory_zone(t_map *map)
-{
+void	show_memory_zone(t_map *map){
 	t_map	*current_map;
 
 	current_map = map;
-	while (current_map != NULL)
-	{
+	while (current_map != NULL){
 		printf("map type: %c\n", current_map->type);
 		if (current_map->type == 'T')
 			ft_putstr("TINY : ");
@@ -47,19 +42,16 @@ void	show_memory_zone(t_map *map)
 	}
 }
 
-void	show_total(t_map *map)
-{
+void	show_total(t_map *map){
 	uint64_t	total;
 	t_map		*current_map;
 	t_chunk		*chunk;
 
 	total = 0;
 	current_map = map;
-	while (current_map != NULL)
-	{
+	while (current_map != NULL){
 		chunk = current_map->first_chunk;
-		while (chunk != NULL)
-		{
+		while (chunk != NULL){
 			total += chunk->data_size;
 			chunk = chunk->next_chunk;
 		}
@@ -70,8 +62,7 @@ void	show_total(t_map *map)
 	ft_putstr(" octets\n");
 }
 
-void	show_alloc_mem(void)
-{
+void	show_alloc_mem(void){
 	t_map *map;
 
 	map = (t_map*)g_first_addr;

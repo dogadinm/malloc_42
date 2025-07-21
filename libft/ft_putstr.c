@@ -1,7 +1,6 @@
 #include "malloc.h"
 
-void	ft_putstr(char const *s)
-{
+void	ft_putstr(char const *s){
 	unsigned int i;
 
 	i = 0;

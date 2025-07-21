@@ -19,7 +19,8 @@ int main()
 	addr2 = (char*)malloc(2000);
 	strcpy(addr1, "Bonjours\n");
 	free(addr1);
-	free(addr2);
+	free(addr1);
+	free(addr1);
 	show_alloc_mem();
 	return (0);
 }

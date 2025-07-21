@@ -1,8 +1,7 @@
 #include "malloc.h"
 
 
-void	*copy_data_size(void *dst, const void *src, size_t dst_size, size_t src_size)
-{
+void	*copy_data_size(void *dst, const void *src, size_t dst_size, size_t src_size){
 	char		*char_dst;
 	const char	*char_src;
 	size_t		i;
@@ -10,25 +9,21 @@ void	*copy_data_size(void *dst, const void *src, size_t dst_size, size_t src_siz
 	char_src = src;
 	char_dst = dst;
 	i = 0;
-	while (i < src_size && i < dst_size)
-	{
+	while (i < src_size && i < dst_size){
 		char_dst[i] = char_src[i];
 		i++;
 	}
 	return (dst);
 }
 
-t_bool	chunk_fusion(t_chunk *chunk, size_t new_size)
-{
+t_bool	chunk_fusion(t_chunk *chunk, size_t new_size){
 	t_chunk	*chunk_next;
 	size_t	available_space;
 
 	available_space = 0;
-	if (chunk != NULL)
-	{
+	if (chunk != NULL){
 		chunk_next = (t_chunk*)chunk->next_chunk;
-		if (chunk_next != NULL && chunk_next->available == TRUE)
-		{
+		if (chunk_next != NULL && chunk_next->available == TRUE){
 			available_space = (chunk->data_size + 
                                 sizeof(t_chunk) +
 								chunk_next->data_size);
@@ -40,8 +35,7 @@ t_bool	chunk_fusion(t_chunk *chunk, size_t new_size)
 	return (FALSE);
 }
 
-t_chunk	*new_allocation(t_chunk *chunk, size_t new_size)
-{
+t_chunk	*new_allocation(t_chunk *chunk, size_t new_size){
 	t_chunk	*new_chunk;
 	void	*ptr_data;
 
@@ -50,8 +44,7 @@ t_chunk	*new_allocation(t_chunk *chunk, size_t new_size)
 	if (ptr_data == NULL)
 		return (NULL);
 	new_chunk = (t_chunk *)(ptr_data - sizeof(t_chunk));
-	if (new_chunk != NULL)
-	{
+	if (new_chunk != NULL){
 		copy_data_size(new_chunk->ptr_data, chunk->ptr_data,
 										new_chunk->data_size, chunk->data_size);
 		free(chunk->ptr_data);
@@ -59,8 +52,7 @@ t_chunk	*new_allocation(t_chunk *chunk, size_t new_size)
 	return (new_chunk);
 }
 
-t_chunk	*resize_allocation(t_chunk *chunk, size_t new_size)
-{
+t_chunk	*resize_allocation(t_chunk *chunk, size_t new_size){
 	t_chunk	*new_chunk;
 
 	new_chunk = NULL;
@@ -80,8 +72,7 @@ t_chunk	*resize_allocation(t_chunk *chunk, size_t new_size)
 	return (new_chunk);
 }
 
-void	*realloc(void *ptr, size_t size)
-{
+void	*realloc(void *ptr, size_t size){
 	t_chunk	*current_chunk;
 	t_chunk	*new_chunk;
 	t_map	*current_map;

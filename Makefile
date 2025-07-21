@@ -5,7 +5,7 @@ endif
 NAME = libft_malloc_$(HOSTTYPE).so
 NAME_LINK = libft_malloc.so
 
-PATH_SRC = ./src/
+# PATH_SRC = ./src/
 
 PATH_INC = ./inc
 
@@ -28,25 +28,25 @@ endif
 
 #_____________FILES____________#
 
-SRC = malloc.c \
-	relloc.c \
-	free.c \
-	delete_chunk.c \
-	chunk.c \
-	map.c \
-	utilities_chunk.c \
-	utilities_map.c \
-	show_alloc_mem.c \
-	ft_putstr.c \
-	ft_putnbr.c \
-	ft_putchar.c \
-	ft_puthexa.c \
-	ft_bzero.c \
-	ft_memset.c \
+SRC = ./src/malloc.c \
+	./src/relloc.c \
+	./src/free.c \
+	./utilties/delete_chunk.c \
+	./utilties/chunk.c \
+	./utilties/map.c \
+	./utilties/utilities_chunk.c \
+	./utilties/utilities_map.c \
+	./utilties/show_alloc_mem.c \
+	./libft/ft_putstr.c \
+	./libft/ft_putnbr.c \
+	./libft/ft_putchar.c \
+	./libft/ft_puthexa.c \
+	./libft/ft_bzero.c \
+	./libft/ft_memset.c \
 
 
 
-OBJ = $(addprefix $(PATH_SRC), $(SRC:.c=.o))
+OBJ = $(SRC:.c=.o)
 
 #____________RULES_____________#
 

@@ -1,8 +1,7 @@
 
 #include "malloc.h"
 
-void	*ft_memset(void *b, int c, size_t len)
-{
+void	*ft_memset(void *b, int c, size_t len){
 	size_t	counter;
 	char	*str;
 
@@ -12,8 +11,7 @@ void	*ft_memset(void *b, int c, size_t len)
 	if (len == 0)
 		return (str);
 	counter = 0;
-	while (counter < len)
-	{
+	while (counter < len){
 		str[counter] = (char)c;
 		counter++;
 	}

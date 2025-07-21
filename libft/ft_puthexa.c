@@ -1,8 +1,7 @@
 #include "malloc.h"
 #include <stdint.h>
 
-void	ft_puthexa(uint64_t nb)
-{
+void	ft_puthexa(uint64_t nb){
 	char	hex_revert[16];
 	int		hex[16];
 	int		i;
@@ -10,8 +9,7 @@ void	ft_puthexa(uint64_t nb)
 	ft_bzero(hex_revert, 16);
 	ft_bzero(hex, 16);
 	i = 0;
-	while (nb)
-	{
+	while (nb){
 		hex[i] = nb % 16;
 		if (hex[i] >= 10)
 			hex_revert[i] = hex[i] + 'A' - 10;
@@ -21,8 +19,7 @@ void	ft_puthexa(uint64_t nb)
 		i++;
 	}
 	ft_putstr("0x");
-	while (i >= 0)
-	{
+	while (i >= 0){
 		ft_putchar(hex_revert[i]);
 		i--;
 	}

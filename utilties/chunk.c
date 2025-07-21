@@ -1,7 +1,6 @@
 #include "malloc.h"
 
-t_chunk	*init_chunk(t_map *map, void *chunk_ptr, size_t data_size)
-{
+t_chunk	*init_chunk(t_map *map, void *chunk_ptr, size_t data_size){
 	t_chunk	*chunk;
 
 	chunk = (t_chunk*)chunk_ptr;
@@ -13,20 +12,17 @@ t_chunk	*init_chunk(t_map *map, void *chunk_ptr, size_t data_size)
 	return (chunk);
 }
 
-void	set_chunk(t_chunk *chunk, size_t data_size)
-{
+void	set_chunk(t_chunk *chunk, size_t data_size){
 	chunk->data_size = data_size;
 	chunk->available = FALSE;
 }
 
-void	release_chunk(t_chunk *chunk)
-{
+void	release_chunk(t_chunk *chunk){
 	chunk->available = TRUE;
 }
 
 
-t_chunk	*add_chunk(t_map *map, size_t size_data)
-{
+t_chunk	*add_chunk(t_map *map, size_t size_data){
 	t_chunk *chunk_addr;
 	t_chunk *last_chunk;
 
@@ -36,8 +32,7 @@ t_chunk	*add_chunk(t_map *map, size_t size_data)
 	return (chunk_addr);
 }
 
-t_chunk	*get_chunk(t_chunk *chunk, t_map *first_map, size_t size)
-{
+t_chunk	*get_chunk(t_chunk *chunk, t_map *first_map, size_t size){
 	t_map	*current_map;
 
 	current_map = first_map;

@@ -1,7 +1,6 @@
 #include "malloc.h"
 
-void	init_map(void *first_map, size_t size, char type)
-{
+void	init_map(void *first_map, size_t size, char type){
 	t_map	*map;
 
 	map = (t_map*)first_map;
