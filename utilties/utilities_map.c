@@ -55,7 +55,6 @@ size_t	number_of_pages(size_t page_size, size_t chunk_size){
 		while (chunks_numbers < MIN_CHUNKS_PER_MAP){
 			page_numbers++;
 			chunks_numbers = page_numbers * page_size / chunk_size;
-			// printf("page_numbers: %zu, chunks_numbers: %zu\n", page_numbers, chunks_numbers);
 		}
 	}
 	return (page_numbers);

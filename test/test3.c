@@ -1,6 +1,4 @@
 #include "../inc/malloc.h"
-#include <string.h>
-
 #define M (1024 * 1024)
 
 void print(char *s)

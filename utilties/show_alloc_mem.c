@@ -28,7 +28,6 @@ void	show_memory_zone(t_map *map){
 
 	current_map = map;
 	while (current_map != NULL){
-		printf("map type: %c\n", current_map->type);
 		if (current_map->type == 'T')
 			ft_putstr("TINY : ");
 		else if (current_map->type == 'S')
