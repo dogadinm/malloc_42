@@ -39,7 +39,7 @@ typedef struct s_map {
 } t_map;
 
 
-
+void	show_alloc_mem(void);
 /* map */
 t_bool	available_map_space(t_map *map, size_t size_data_chunk);
 t_map	*find_map(t_map *first_map, size_t size);
@@ -54,7 +54,7 @@ void	release_empty_zone(t_map *map_origin);
 t_bool	check_type_map(t_map *map, size_t size);
 t_bool	check_chunk_exist(t_chunk *addr_chunk);
 void	release_chunk(t_chunk *chunk);
-void	show_alloc_mem(void);
+
 
 
 /* chunk */
