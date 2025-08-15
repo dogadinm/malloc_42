@@ -1,0 +1,6 @@
+gcc -o test0 ./test0.c 
+/usr/bin/time -v ./test0
+./run_linux.sh /usr/bin/time -v ./test0
+
+gcc -o test4 ./test4.c -L. ../libft_malloc.so && ./run_linux.sh ./test4   
+
