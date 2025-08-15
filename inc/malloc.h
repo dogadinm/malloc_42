@@ -72,4 +72,11 @@ void	ft_puthexa(uint64_t nb);
 void	ft_bzero(void *s, size_t n);
 void	*ft_memset(void *b, int c, size_t len);
 
+
+
+#define MAL_ALIGN   (2 * sizeof(size_t))
+#define ALIGN_UP_SIZE(sz, a)   ( ((sz) + (a) - 1) & ~((a) - 1) )
+#define ALIGN_UP_PTR(p, a)     ( (void*)ALIGN_UP_SIZE((uintptr_t)(p), (a)) )
+
+
 #endif

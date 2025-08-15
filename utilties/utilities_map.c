@@ -1,19 +1,30 @@
 #include "malloc.h"
 
-t_bool	available_map_space(t_map *map, size_t size_data_chunk){
-	t_chunk	*last_chunk;
-	void	*max_addr;
-	void	*next_addr;
+t_bool available_map_space(t_map *map, size_t size_data_chunk){
+    t_chunk *last_chunk = get_last_chunk(map);
+    void *max_addr = (char*)map->map_origin + map->total_size;
 
-	last_chunk = get_last_chunk(map);
-	max_addr = map->map_origin + map->total_size;
-	next_addr = (void*)last_chunk + sizeof(t_chunk)
-							+ last_chunk->data_size + sizeof(t_chunk)
-							+ size_data_chunk;
-	if (next_addr > max_addr)
-		return (FALSE);
-	return (TRUE);
+    void *next_chunk_start = ALIGN_UP_PTR((char*)last_chunk->ptr_data + last_chunk->data_size, MAL_ALIGN);
+    void *next_data_start  = ALIGN_UP_PTR((char*)next_chunk_start + sizeof(t_chunk), MAL_ALIGN);
+    void *next_data_end    = (char*)next_data_start + size_data_chunk;
+
+    return next_data_end <= max_addr ? TRUE : FALSE;
 }
+
+// t_bool	available_map_space(t_map *map, size_t size_data_chunk){
+// 	t_chunk	*last_chunk;
+// 	void	*max_addr;
+// 	void	*next_addr;
+
+// 	last_chunk = get_last_chunk(map);
+// 	max_addr = map->map_origin + map->total_size;
+// 	next_addr = (void*)last_chunk + sizeof(t_chunk)
+// 							+ last_chunk->data_size + sizeof(t_chunk)
+// 							+ size_data_chunk;
+// 	if (next_addr > max_addr)
+// 		return (FALSE);
+// 	return (TRUE);
+// }
 
 t_bool	check_type_map(t_map *map, size_t size){
 	if (map && map->type){
@@ -70,14 +81,34 @@ void	*allocate_memory(size_t size){
 	return (ptr_map);
 }
 
-size_t	calculate_map_size(size_t size){
-    size_t	page_numbers;
-	size_t	map_size;
-	size_t	page_size;
+// size_t	calculate_map_size(size_t size){
+//     size_t	page_numbers;
+// 	size_t	map_size;
+// 	size_t	page_size;
 
-    page_size = getpagesize();
-	page_numbers = number_of_pages(page_size, sizeof(t_chunk) + size);
+//     page_size = getpagesize();
+// 	page_numbers = number_of_pages(page_size, sizeof(t_chunk) + size);
 
-	map_size = page_numbers * page_size;
-	return (map_size);
+// 	map_size = page_numbers * page_size;
+// 	return (map_size);
+// }
+
+
+size_t calculate_map_size(size_t user_size){
+    size_t page_size = getpagesize();
+
+    size_t per_chunk = ALIGN_UP_SIZE(sizeof(t_chunk), MAL_ALIGN)
+                     + ALIGN_UP_SIZE(user_size,       MAL_ALIGN);
+
+    size_t pages = number_of_pages(page_size, per_chunk);
+    if (pages == 0) pages = 1;
+
+    size_t header = ALIGN_UP_SIZE(sizeof(t_map), MAL_ALIGN);
+
+    size_t map_size = pages * page_size;
+    if (map_size < header + per_chunk * MIN_CHUNKS_PER_MAP) {
+        size_t need = header + per_chunk * MIN_CHUNKS_PER_MAP;
+        map_size = ALIGN_UP_SIZE(need, page_size);
+    }
+    return map_size;
 }

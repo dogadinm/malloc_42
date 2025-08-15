@@ -1,31 +1,62 @@
 #include "malloc.h"
 
-void	init_map(void *first_map, size_t size, char type){
-	t_map	*map;
+// void	init_map(void *first_map, size_t size, char type){
+// 	t_map	*map;
 
-	map = (t_map*)first_map;
-	map->first_chunk = first_map + sizeof(t_map);
-	map->map_origin = first_map;
-	map->map_next = NULL;
-	map->map_prev = NULL;
-	map->total_size = size;
-	map->type = type;
+// 	map = (t_map*)first_map;
+// 	map->first_chunk = first_map + sizeof(t_map);
+// 	map->map_origin = first_map;
+// 	map->map_next = NULL;
+// 	map->map_prev = NULL;
+// 	map->total_size = size;
+// 	map->type = type;
+// }
+
+void init_map(void *first_map, size_t size, char type){
+    t_map *map = (t_map*)first_map;
+
+    map->map_origin = first_map;
+    map->map_next = NULL;
+    map->map_prev = NULL;
+    map->total_size = size;
+    map->type = type;
+    map->first_chunk = ALIGN_UP_PTR((char*)first_map + sizeof(t_map), MAL_ALIGN);
 }
 
 t_map *create_type_map(size_t size, char type){
-    size_t	map_size;
-    void	*ptr_map;
-    if (type == LARGE)
-        map_size = size * sizeof(t_chunk);
-    else
+    size_t map_size;
+    void *ptr_map;
+
+    if (type == LARGE) {
+        size_t page = getpagesize();
+        size_t need = ALIGN_UP_SIZE(sizeof(t_map),   MAL_ALIGN)
+                    + ALIGN_UP_SIZE(sizeof(t_chunk), MAL_ALIGN)
+                    + ALIGN_UP_SIZE(size,            MAL_ALIGN);
+        map_size = ALIGN_UP_SIZE(need, page);
+    } else {
         map_size = calculate_map_size(size);
+    }
 
     ptr_map = allocate_memory(map_size);
-	
     if (ptr_map != NULL)
-		init_map(ptr_map, map_size, type);
-	return (ptr_map);
+        init_map(ptr_map, map_size, type);
+    return (t_map*)ptr_map;
 }
+
+// t_map *create_type_map(size_t size, char type){
+//     size_t	map_size;
+//     void	*ptr_map;
+//     if (type == LARGE)
+//         map_size = size * sizeof(t_chunk);
+//     else
+//         map_size = calculate_map_size(size);
+
+//     ptr_map = allocate_memory(map_size);
+	
+//     if (ptr_map != NULL)
+// 		init_map(ptr_map, map_size, type);
+// 	return (ptr_map);
+// }
 
 t_map *create_map(size_t size){
     t_map *ptr_map;
