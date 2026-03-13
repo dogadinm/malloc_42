@@ -5,6 +5,7 @@
 # include <unistd.h>
 # include <stdint.h>
 # include <stdio.h>
+# include <pthread.h>
 
 # define TINY 'T'
 # define SMALL 'S'
@@ -19,7 +20,8 @@
 
 typedef unsigned int	t_bool;
 
-extern void *g_first_addr;
+extern void				*g_first_addr;
+extern pthread_mutex_t	g_malloc_mutex;
 
 typedef struct s_chunk {
 	void         *parent_map;

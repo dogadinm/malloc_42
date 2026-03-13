@@ -18,10 +18,10 @@ CC = cc
 
 ifeq ($(DEBUG),yes)
 	CFLAGS = $(INCLUDES) -g -fPIC
-	LDFLAGS = -shared
+	LDFLAGS = -shared -lpthread
 else
 	CFLAGS = -Wall -Wextra -Werror $(INCLUDES) -fPIC
-	LDFLAGS = -shared
+	LDFLAGS = -shared -lpthread
 endif
 
 # LIBS = -L libft/ -lft

@@ -35,7 +35,7 @@ run_test() {
     local bin="$TMP_DIR/$name"
 
     # Compile
-    if ! cc -Wall -Wextra -I"$ROOT/inc" "$src" "$LIB" -o "$bin" 2>"$TMP_DIR/${name}_compile.log"; then
+    if ! cc -Wall -Wextra -I"$ROOT/inc" "$src" "$LIB" -lpthread -o "$bin" 2>"$TMP_DIR/${name}_compile.log"; then
         echo -e "${RED}[FAIL]${NC} $name — compile error:"
         cat "$TMP_DIR/${name}_compile.log"
         FAIL=$((FAIL + 1))
@@ -69,6 +69,7 @@ run_test "test5"        "$TESTS_DIR/test5.c"
 run_test "test_leak"    "$TESTS_DIR/test_leak.c"
 run_test "test_realloc"  "$TESTS_DIR/test_realloc.c"
 run_test "test_coalesce" "$TESTS_DIR/test_coalesce.c"
+run_test "test_threads"  "$TESTS_DIR/test_threads.c"
 
 # ── 4. Summary ────────────────────────────────────────────────────────────────
 echo ""

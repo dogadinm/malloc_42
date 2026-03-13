@@ -105,6 +105,7 @@ void	*realloc(void *ptr, size_t size){
 	t_chunk	*current_chunk;
 	t_chunk	*new_chunk;
 	t_map	*current_map;
+	void	*result;
 
 	if (ptr == NULL || g_first_addr == NULL)
 		return (malloc(size));
@@ -112,17 +113,20 @@ void	*realloc(void *ptr, size_t size){
 		free(ptr);
 		return (NULL);
 	}
+	pthread_mutex_lock(&g_malloc_mutex);
 	current_chunk = (t_chunk*)(ptr - ALIGN_UP_SIZE(sizeof(t_chunk), MAL_ALIGN));
-	if (check_chunk_exist(current_chunk) == FALSE)
+	if (check_chunk_exist(current_chunk) == FALSE
+		|| current_chunk->available == TRUE)
+	{
+		pthread_mutex_unlock(&g_malloc_mutex);
 		return (NULL);
-	if (current_chunk->available == TRUE)
-		return (NULL);
+	}
 	current_map = (t_map*)current_chunk->parent_map;
 	if (check_type_map(current_map, size) == TRUE)
 		new_chunk = resize_allocation(current_chunk, size);
 	else
 		new_chunk = new_allocation(current_chunk, size);
-	if (new_chunk == NULL)
-		return (NULL);
-	return (new_chunk->ptr_data);
+	result = (new_chunk != NULL) ? new_chunk->ptr_data : NULL;
+	pthread_mutex_unlock(&g_malloc_mutex);
+	return (result);
 }
