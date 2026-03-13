@@ -28,10 +28,15 @@ void	release_empty_zone(t_map *map_origin){
 		map_prev = map_origin->map_prev;
 		if (zone_is_empty(map_origin) == TRUE){
 			if (map_prev != NULL){
-				release_zone(map_origin);
 				map_prev->map_next = map_next;
 				if (map_next != NULL)
 					map_next->map_prev = map_prev;
+				release_zone(map_origin);
+			} else {
+				g_first_addr = map_next;
+				if (map_next != NULL)
+					((t_map*)map_next)->map_prev = NULL;
+				release_zone(map_origin);
 			}
 		}
 	}

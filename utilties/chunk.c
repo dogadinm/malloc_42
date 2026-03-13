@@ -48,8 +48,10 @@ t_chunk	*get_chunk(t_chunk *chunk, t_map *first_map, size_t size){
 		if (chunk == NULL){
 			if (available_map_space(current_map, size) == TRUE)
 				chunk = add_chunk(current_map, size);
-			else
+			else if (current_map->map_next != NULL)
 				current_map = current_map->map_next;
+			else
+				current_map = NULL;
 		}
 	}
 	return (chunk);

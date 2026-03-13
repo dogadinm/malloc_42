@@ -45,8 +45,8 @@ t_chunk	*new_allocation(t_chunk *chunk, size_t new_size){
 		return (NULL);
 	new_chunk = (t_chunk *)(ptr_data - ALIGN_UP_SIZE(sizeof(t_chunk), MAL_ALIGN));
 	if (new_chunk != NULL){
-		copy_data_size(new_chunk->ptr_data, chunk->ptr_data,
-										new_chunk->data_size, chunk->data_size);
+		copy_data_size(ptr_data, chunk->ptr_data,
+										new_size, chunk->data_size);
 		free(chunk->ptr_data);
 	}
 	return (new_chunk);
@@ -61,10 +61,14 @@ t_chunk	*resize_allocation(t_chunk *chunk, size_t new_size){
 		new_chunk = chunk;
 	}
 	else if (chunk_fusion(chunk, new_size) == TRUE){
-		chunk->data_size = new_size;
+		t_chunk *next = (t_chunk*)chunk->next_chunk;
+		chunk->data_size = chunk->data_size
+			+ ALIGN_UP_SIZE(sizeof(t_chunk), MAL_ALIGN)
+			+ next->data_size;
+		chunk->next_chunk = next->next_chunk;
+		if (chunk->next_chunk != NULL)
+			((t_chunk*)chunk->next_chunk)->parent_map = chunk->parent_map;
 		new_chunk = chunk;
-		if ((t_chunk*)chunk->next_chunk != NULL)
-			new_chunk->next_chunk = ((t_chunk*)chunk->next_chunk)->next_chunk;
 	}
 	else{
 		new_chunk = new_allocation(chunk, new_size);
@@ -79,6 +83,10 @@ void	*realloc(void *ptr, size_t size){
 
 	if (ptr == NULL || g_first_addr == NULL)
 		return (malloc(size));
+	if (size == 0){
+		free(ptr);
+		return (NULL);
+	}
 	current_chunk = (t_chunk*)(ptr - ALIGN_UP_SIZE(sizeof(t_chunk), MAL_ALIGN));
 	if (check_chunk_exist(current_chunk) == FALSE)
 		return (NULL);
