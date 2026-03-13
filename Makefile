@@ -31,6 +31,7 @@ SRC = ./src/malloc.c \
 	./utilties/utilities_map.c \
 	./utilties/show_alloc_mem.c \
 	./utilties/show_alloc_mem_ex.c \
+	./utilties/debug.c \
 
 OBJ = $(SRC:.c=.o)
 

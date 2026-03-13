@@ -14,6 +14,8 @@ void	free(void *ptr)
 		if (chunk->available == FALSE)
 		{
 			map = (t_map*)chunk->parent_map;
+			debug_scribble_free(ptr, chunk->data_size);
+			debug_free(ptr);
 			release_chunk(chunk);
 			coalesce_chunk(map, chunk);
 			release_empty_zone(map);

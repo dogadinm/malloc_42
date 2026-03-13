@@ -43,6 +43,14 @@ typedef struct s_map {
 
 void	show_alloc_mem(void);
 void	show_alloc_mem_ex(void);
+
+/* debug env */
+void	init_debug_env(void);
+void	debug_malloc(void *ptr, size_t size);
+void	debug_free(void *ptr);
+void	debug_realloc(void *old_ptr, size_t size, void *new_ptr);
+void	debug_scribble_free(void *ptr, size_t size);
+void	debug_scribble_alloc(void *ptr, size_t size);
 /* map */
 t_bool	available_map_space(t_map *map, size_t size_data_chunk);
 t_map	*find_map(t_map *first_map, size_t size);

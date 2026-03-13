@@ -127,6 +127,7 @@ void	*realloc(void *ptr, size_t size){
 	else
 		new_chunk = new_allocation(current_chunk, size);
 	result = (new_chunk != NULL) ? new_chunk->ptr_data : NULL;
+	debug_realloc(ptr, size, result);
 	pthread_mutex_unlock(&g_malloc_mutex);
 	return (result);
 }

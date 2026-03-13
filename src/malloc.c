@@ -12,6 +12,7 @@ static void	init_mutex(void)
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
 	pthread_mutex_init(&g_malloc_mutex, &attr);
 	pthread_mutexattr_destroy(&attr);
+	init_debug_env();
 }
 
 void	*malloc(size_t size)
@@ -35,6 +36,8 @@ void	*malloc(size_t size)
 	}
 	set_chunk(chunk, size);
 	result = chunk->ptr_data;
+	debug_scribble_alloc(result, size);
+	debug_malloc(result, size);
 	pthread_mutex_unlock(&g_malloc_mutex);
 	return (result);
 }
