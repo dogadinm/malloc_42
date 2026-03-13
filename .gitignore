@@ -1,0 +1,16 @@
+# Compiled objects
+*.o
+
+# Shared libraries
+*.so
+*.so.*
+*.dylib
+
+# Symlink
+libft_malloc.so
+
+# Test binaries
+tests/tmp/
+
+# macOS
+.DS_Store
