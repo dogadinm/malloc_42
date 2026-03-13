@@ -58,7 +58,7 @@ $(NAME): $(OBJ)
 	# make -C libft/
 	# $(CC) $(OBJ) -o $(NAME) $(LIBS) $(LDFLAGS)
 	$(CC) $(OBJ) -o $(NAME) $(LDFLAGS)
-	ln -s $(NAME) $(NAME_LINK)
+	ln -sf $(NAME) $(NAME_LINK)
 
 #____CLEAN____#
 
