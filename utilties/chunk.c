@@ -45,14 +45,8 @@ t_chunk	*get_chunk(t_chunk *chunk, t_map *first_map, size_t size){
 			init_chunk(current_map, current_map->first_chunk, size);
 		}
 		chunk = exist_free_chunk(current_map->first_chunk, size);
-		if (chunk == NULL){
-			if (available_map_space(current_map, size) == TRUE)
-				chunk = add_chunk(current_map, size);
-			else if (current_map->map_next != NULL)
-				current_map = current_map->map_next;
-			else
-				current_map = NULL;
-		}
+		if (chunk == NULL)
+			chunk = add_chunk(current_map, size);
 	}
 	return (chunk);
 }

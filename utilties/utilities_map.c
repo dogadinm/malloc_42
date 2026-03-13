@@ -33,11 +33,14 @@ t_map	*find_map(t_map *first_map, size_t size){
 
 	current_map = first_map;
 	while (current_map != NULL){
-		if (check_type_map(current_map, size) == TRUE)
-			return (current_map);
-		current_map = current_map->map_next;
+		if (check_type_map(current_map, size) == TRUE){
+			if (exist_free_chunk(current_map->first_chunk, size) != NULL
+				|| available_map_space(current_map, size) == TRUE)
+				return (current_map);
+		}
+		current_map = (t_map*)current_map->map_next;
 	}
-	return (current_map);
+	return (NULL);
 }
 
 size_t	number_of_pages(size_t page_size, size_t chunk_size){
