@@ -49,7 +49,7 @@ size_t	calculate_map_size(size_t size);
 void	*allocate_memory(size_t size);
 void 	*malloc(size_t size);
 void	*realloc(void *ptr, size_t size);
-extern void	free(void *ptr);
+void	free(void *ptr);
 void	release_empty_zone(t_map *map_origin);
 t_bool	check_type_map(t_map *map, size_t size);
 t_bool	check_chunk_exist(t_chunk *addr_chunk);
