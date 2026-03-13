@@ -52,12 +52,37 @@ t_chunk	*new_allocation(t_chunk *chunk, size_t new_size){
 	return (new_chunk);
 }
 
+static void	split_chunk(t_chunk *chunk, size_t old_size, size_t new_size)
+{
+	size_t	header_size;
+	void	*free_addr;
+	void	*end_boundary;
+	size_t	free_data_size;
+	t_chunk	*free_chunk;
+
+	header_size = ALIGN_UP_SIZE(sizeof(t_chunk), MAL_ALIGN);
+	free_addr = ALIGN_UP_PTR((char*)chunk->ptr_data + new_size, MAL_ALIGN);
+	if (chunk->next_chunk != NULL)
+		end_boundary = chunk->next_chunk;
+	else
+		end_boundary = ALIGN_UP_PTR((char*)chunk->ptr_data + old_size, MAL_ALIGN);
+	if ((char*)end_boundary - (char*)free_addr <= (long)header_size)
+		return ;
+	free_data_size = (size_t)((char*)end_boundary - (char*)free_addr) - header_size;
+	free_chunk = init_chunk((t_map*)chunk->parent_map, free_addr, free_data_size);
+	free_chunk->next_chunk = chunk->next_chunk;
+	chunk->next_chunk = free_chunk;
+}
+
 t_chunk	*resize_allocation(t_chunk *chunk, size_t new_size){
 	t_chunk	*new_chunk;
+	size_t	old_size;
 
 	new_chunk = NULL;
 	if (chunk->data_size >= new_size){
+		old_size = chunk->data_size;
 		chunk->data_size = new_size;
+		split_chunk(chunk, old_size, new_size);
 		new_chunk = chunk;
 	}
 	else if (chunk_fusion(chunk, new_size) == TRUE){
