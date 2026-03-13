@@ -6,7 +6,7 @@ extern void	free(void *ptr)
 	t_map	*map;
 
 	if (ptr != NULL && g_first_addr != NULL){
-		chunk = (t_chunk*)(ptr - sizeof(t_chunk));
+		chunk = (t_chunk*)(ptr - ALIGN_UP_SIZE(sizeof(t_chunk), MAL_ALIGN));
 		if (check_chunk_exist(chunk) == TRUE){
 			if (chunk->available == TRUE)
 				return ;

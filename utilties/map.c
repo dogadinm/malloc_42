@@ -1,17 +1,5 @@
 #include "malloc.h"
 
-// void	init_map(void *first_map, size_t size, char type){
-// 	t_map	*map;
-
-// 	map = (t_map*)first_map;
-// 	map->first_chunk = first_map + sizeof(t_map);
-// 	map->map_origin = first_map;
-// 	map->map_next = NULL;
-// 	map->map_prev = NULL;
-// 	map->total_size = size;
-// 	map->type = type;
-// }
-
 void init_map(void *first_map, size_t size, char type){
     t_map *map = (t_map*)first_map;
 
@@ -42,21 +30,6 @@ t_map *create_type_map(size_t size, char type){
         init_map(ptr_map, map_size, type);
     return (t_map*)ptr_map;
 }
-
-// t_map *create_type_map(size_t size, char type){
-//     size_t	map_size;
-//     void	*ptr_map;
-//     if (type == LARGE)
-//         map_size = size * sizeof(t_chunk);
-//     else
-//         map_size = calculate_map_size(size);
-
-//     ptr_map = allocate_memory(map_size);
-	
-//     if (ptr_map != NULL)
-// 		init_map(ptr_map, map_size, type);
-// 	return (ptr_map);
-// }
 
 t_map *create_map(size_t size){
     t_map *ptr_map;

@@ -43,7 +43,7 @@ t_chunk	*new_allocation(t_chunk *chunk, size_t new_size){
 	ptr_data = malloc(new_size);
 	if (ptr_data == NULL)
 		return (NULL);
-	new_chunk = (t_chunk *)(ptr_data - sizeof(t_chunk));
+	new_chunk = (t_chunk *)(ptr_data - ALIGN_UP_SIZE(sizeof(t_chunk), MAL_ALIGN));
 	if (new_chunk != NULL){
 		copy_data_size(new_chunk->ptr_data, chunk->ptr_data,
 										new_chunk->data_size, chunk->data_size);
@@ -79,7 +79,7 @@ void	*realloc(void *ptr, size_t size){
 
 	if (ptr == NULL || g_first_addr == NULL)
 		return (malloc(size));
-	current_chunk = (t_chunk*)(ptr - sizeof(t_chunk));
+	current_chunk = (t_chunk*)(ptr - ALIGN_UP_SIZE(sizeof(t_chunk), MAL_ALIGN));
 	if (check_chunk_exist(current_chunk) == FALSE)
 		return (NULL);
 	if (current_chunk->available == TRUE)
