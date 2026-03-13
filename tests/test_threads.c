@@ -25,7 +25,7 @@ static void	print_fail(const char *name)
 	g_fail = 1;
 }
 
-/* --- тест 1: параллельный malloc/free --- */
+/* --- test 1: parallel malloc/free --- */
 
 static void	*thread_alloc_free(void *arg)
 {
@@ -70,7 +70,7 @@ static void	test_parallel_alloc_free(void)
 	print_ok("parallel malloc/free: no crash or corruption");
 }
 
-/* --- тест 2: параллельный realloc --- */
+/* --- test 2: parallel realloc --- */
 
 static void	*thread_realloc(void *arg)
 {
@@ -115,7 +115,7 @@ static void	test_parallel_realloc(void)
 	print_ok("parallel realloc: no crash or corruption");
 }
 
-/* --- тест 3: данные не перезаписаны другим потоком --- */
+/* --- test 3: data not overwritten by another thread --- */
 
 typedef struct s_targ
 {
@@ -136,7 +136,7 @@ static void	*thread_data_check(void *arg)
 		return (NULL);
 	}
 	memset(p, targ->id, 256);
-	/* небольшая работа — дать другим потокам шанс аллоцировать */
+	/* do some work — give other threads a chance to allocate */
 	i = 0;
 	while (i < 10000) i++;
 
@@ -185,7 +185,7 @@ static void	test_data_isolation(void)
 		print_fail("data isolation: each thread's allocation intact");
 }
 
-/* --- тест 4: stress — много потоков, много аллокаций --- */
+/* --- test 4: stress — many threads, many allocations --- */
 
 static void	*thread_stress(void *arg)
 {
@@ -236,7 +236,7 @@ int	main(void)
 	test_data_isolation();
 	test_stress();
 
-	print("\n=== show_alloc_mem (должно быть пусто) ===\n");
+	print("\n=== show_alloc_mem (should be empty) ===\n");
 	show_alloc_mem();
 
 	if (g_fail)

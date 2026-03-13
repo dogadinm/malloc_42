@@ -21,7 +21,7 @@ static void	print_fail(const char *name)
 	g_fail = 1;
 }
 
-/* проверяем что первые n байт совпадают */
+/* check that the first n bytes all equal val */
 static int	data_eq(const char *ptr, char val, size_t n)
 {
 	size_t i = 0;
@@ -34,7 +34,7 @@ static int	data_eq(const char *ptr, char val, size_t n)
 	return (1);
 }
 
-/* --- тесты --- */
+/* --- tests --- */
 
 /* realloc(NULL, size) == malloc(size) */
 static void	test_null_ptr(void)
@@ -52,8 +52,8 @@ static void	test_zero_size(void)
 {
 	void *p = malloc(64);
 	realloc(p, 0);
-	/* после этого g_first_addr должен быть NULL или зона пустая,
-	   следующий malloc должен работать нормально */
+	/* after this g_first_addr should be NULL or zone empty,
+	   next malloc must work normally */
 	void *q = malloc(8);
 	if (q != NULL)
 		print_ok("realloc(ptr, 0) frees memory, next malloc works");
@@ -62,7 +62,7 @@ static void	test_zero_size(void)
 	free(q);
 }
 
-/* grow внутри той же зоны (shrink потом grow) */
+/* grow within the same zone */
 static void	test_grow_same_zone(void)
 {
 	char *p = malloc(64);
@@ -82,7 +82,7 @@ static void	test_grow_same_zone(void)
 	free(p2);
 }
 
-/* shrink — данные должны сохраниться, остаток уходит в свободный чанк */
+/* shrink — data must be preserved, remainder goes into a free chunk */
 static void	test_shrink(void)
 {
 	char *p = malloc(512);
@@ -100,7 +100,7 @@ static void	test_shrink(void)
 	else
 		print_fail("realloc shrink: data preserved");
 
-	/* остаток должен быть доступен для новых аллокаций */
+	/* remainder must be available for new allocations */
 	void *q = malloc(64);
 	if (q != NULL)
 		print_ok("realloc shrink: freed remainder is reusable");
@@ -110,7 +110,7 @@ static void	test_shrink(void)
 	free(q);
 }
 
-/* цепочка realloc: растём постепенно */
+/* realloc chain: grow incrementally */
 static void	test_chain_grow(void)
 {
 	char *p = malloc(128);
@@ -133,7 +133,7 @@ static void	test_chain_grow(void)
 	free(p);
 }
 
-/* цепочка realloc: уменьшаем */
+/* realloc chain: shrink gradually */
 static void	test_chain_shrink(void)
 {
 	char *p = malloc(1024);
@@ -155,7 +155,7 @@ static void	test_chain_shrink(void)
 	free(p);
 }
 
-/* смена типа зоны TINY → LARGE */
+/* zone type change TINY -> LARGE */
 static void	test_type_change(void)
 {
 	char *p = malloc(64);
@@ -175,7 +175,7 @@ static void	test_type_change(void)
 	free(p2);
 }
 
-/* тот же размер — просто возвращает тот же указатель */
+/* same size — simply returns the same pointer */
 static void	test_same_size(void)
 {
 	char *p = malloc(128);
@@ -207,7 +207,7 @@ int	main(void)
 	test_type_change();
 	test_same_size();
 
-	print("\n=== show_alloc_mem (должно быть пусто) ===\n");
+	print("\n=== show_alloc_mem (should be empty) ===\n");
 	show_alloc_mem();
 
 	if (g_fail)

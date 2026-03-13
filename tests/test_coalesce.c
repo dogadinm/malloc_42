@@ -22,23 +22,23 @@ static void	print_fail(const char *name)
 }
 
 /*
-** После free соседних чанков и нового malloc большего размера
-** coalescing должен дать место без новой mmap-зоны.
-** Проверяем: указатель попадает в тот же диапазон адресов.
+** After freeing adjacent chunks and requesting a larger malloc,
+** coalescing should provide space without a new mmap zone.
+** We verify that the new pointer is non-NULL.
 */
 
-/* --- forward coalescing: освободить A и B, потом запросить A+B --- */
+/* --- forward coalescing: free A then B, then request A+B size --- */
 static void	test_forward(void)
 {
 	void	*a = malloc(128);
 	void	*b = malloc(128);
-	void	*c = malloc(64);	/* якорь, держит зону живой */
+	void	*c = malloc(64);	/* anchor to keep zone alive */
 
 	(void)c;
 	free(a);
 	free(b);
 
-	/* после слияния A и B должен появиться чанк ~256+ байт */
+	/* after merging A and B, a ~256+ byte chunk should be available */
 	void *big = malloc(200);
 	if (big != NULL)
 		print_ok("forward coalesce: large alloc fits after free(A)+free(B)");
@@ -49,7 +49,7 @@ static void	test_forward(void)
 	free(c);
 }
 
-/* --- backward coalescing: освободить B потом A, слияние B->A --- */
+/* --- backward coalescing: free B then A, merge B into A --- */
 static void	test_backward(void)
 {
 	void	*a = malloc(128);
@@ -57,8 +57,8 @@ static void	test_backward(void)
 	void	*c = malloc(64);
 
 	(void)c;
-	free(b);	/* b свободен */
-	free(a);	/* a должен слиться с b (backward + forward) */
+	free(b);	/* b is free */
+	free(a);	/* a should merge with b (backward + forward) */
 
 	void *big = malloc(200);
 	if (big != NULL)
@@ -70,18 +70,18 @@ static void	test_backward(void)
 	free(c);
 }
 
-/* --- три чанка: освободить A, C, B — все три сливаются --- */
+/* --- three chunks: free A, C, B — all three merge --- */
 static void	test_three_chunks(void)
 {
 	void	*a = malloc(64);
 	void	*b = malloc(64);
 	void	*c = malloc(64);
-	void	*d = malloc(32);	/* якорь */
+	void	*d = malloc(32);	/* anchor */
 
 	(void)d;
 	free(a);
 	free(c);
-	free(b);	/* b соединяет a и c — все три должны слиться */
+	free(b);	/* b bridges a and c — all three should merge */
 
 	void *big = malloc(150);
 	if (big != NULL)
@@ -93,16 +93,16 @@ static void	test_three_chunks(void)
 	free(d);
 }
 
-/* --- зона полностью пустеет после coalescing --- */
+/* --- zone becomes fully empty after coalescing --- */
 static void	test_zone_released(void)
 {
 	void	*a = malloc(64);
 	void	*b = malloc(64);
 
 	free(a);
-	free(b);	/* зона должна освободиться (munmap) */
+	free(b);	/* zone should be released via munmap */
 
-	/* следующий malloc должен работать нормально */
+	/* next malloc must work normally */
 	void *p = malloc(32);
 	if (p != NULL)
 		print_ok("zone released after all chunks coalesced and freed");
@@ -111,7 +111,7 @@ static void	test_zone_released(void)
 	free(p);
 }
 
-/* --- фрагментация: много маленьких alloc/free, потом большой --- */
+/* --- fragmentation: many small alloc/free, then one large --- */
 static void	test_fragmentation(void)
 {
 	void	*ptrs[10];
@@ -123,7 +123,7 @@ static void	test_fragmentation(void)
 		ptrs[i] = malloc(32);
 		i++;
 	}
-	/* освобождаем чётные — создаём фрагменты */
+	/* free even indices — create fragments */
 	i = 0;
 	while (i < 10)
 	{
@@ -131,7 +131,7 @@ static void	test_fragmentation(void)
 			free(ptrs[i]);
 		i++;
 	}
-	/* освобождаем нечётные — coalescing должен слить всё */
+	/* free odd indices — coalescing should merge everything */
 	i = 1;
 	while (i < 10)
 	{
@@ -148,7 +148,7 @@ static void	test_fragmentation(void)
 	free(big);
 }
 
-/* --- данные соседнего живого чанка не затронуты --- */
+/* --- data of a live neighbor chunk must not be touched --- */
 static void	test_data_integrity(void)
 {
 	char	*a = malloc(64);
@@ -158,7 +158,7 @@ static void	test_data_integrity(void)
 	memset(b, 0xAB, 64);
 
 	free(a);
-	free(c);	/* coalescing вокруг b */
+	free(c);	/* coalescing around b */
 
 	int ok = 1;
 	int i = 0;
@@ -189,7 +189,7 @@ int	main(void)
 	test_fragmentation();
 	test_data_integrity();
 
-	print("\n=== show_alloc_mem (должно быть пусто) ===\n");
+	print("\n=== show_alloc_mem (should be empty) ===\n");
 	show_alloc_mem();
 
 	if (g_fail)

@@ -31,7 +31,7 @@ int	main(void)
 	free(nums);
 	free(binary);
 
-	print("\n=== after free: show_alloc_mem_ex (должно быть пусто) ===\n");
+	print("\n=== after free: show_alloc_mem_ex (should be empty) ===\n");
 	show_alloc_mem_ex();
 
 	return (0);
