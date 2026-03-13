@@ -37,6 +37,7 @@ SRC = ./src/malloc.c \
 	./utilties/utilities_chunk.c \
 	./utilties/utilities_map.c \
 	./utilties/show_alloc_mem.c \
+	./utilties/show_alloc_mem_ex.c \
 	./libft/ft_putstr.c \
 	./libft/ft_putnbr.c \
 	./libft/ft_putchar.c \

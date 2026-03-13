@@ -70,6 +70,7 @@ run_test "test_leak"    "$TESTS_DIR/test_leak.c"
 run_test "test_realloc"  "$TESTS_DIR/test_realloc.c"
 run_test "test_coalesce" "$TESTS_DIR/test_coalesce.c"
 run_test "test_threads"  "$TESTS_DIR/test_threads.c"
+run_test "test_show_ex"  "$TESTS_DIR/test_show_ex.c"
 
 # ── 4. Summary ────────────────────────────────────────────────────────────────
 echo ""
