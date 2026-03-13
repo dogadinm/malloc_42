@@ -12,7 +12,8 @@ void	free(void *ptr)
 				return ;
 
 			map = (t_map*)chunk->parent_map;
-            release_chunk(chunk);
+			release_chunk(chunk);
+			coalesce_chunk(map, chunk);
 			release_empty_zone(map);
 		}
 	}

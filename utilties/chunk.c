@@ -20,6 +20,30 @@ void	release_chunk(t_chunk *chunk){
 	chunk->available = TRUE;
 }
 
+void	coalesce_chunk(t_map *map, t_chunk *chunk)
+{
+	t_chunk	*next;
+	t_chunk	*current;
+
+	next = (t_chunk*)chunk->next_chunk;
+	while (next != NULL && next->available == TRUE)
+	{
+		chunk->data_size += ALIGN_UP_SIZE(sizeof(t_chunk), MAL_ALIGN)
+			+ next->data_size;
+		chunk->next_chunk = next->next_chunk;
+		next = (t_chunk*)chunk->next_chunk;
+	}
+	current = map->first_chunk;
+	while (current != NULL && (t_chunk*)current->next_chunk != chunk)
+		current = (t_chunk*)current->next_chunk;
+	if (current != NULL && current->available == TRUE)
+	{
+		current->data_size += ALIGN_UP_SIZE(sizeof(t_chunk), MAL_ALIGN)
+			+ chunk->data_size;
+		current->next_chunk = chunk->next_chunk;
+	}
+}
+
 t_chunk *add_chunk(t_map *map, size_t size_data){
     t_chunk *last_chunk = get_last_chunk(map);
 
