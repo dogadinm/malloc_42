@@ -24,8 +24,8 @@ t_bool	chunk_fusion(t_chunk *chunk, size_t new_size){
 	if (chunk != NULL){
 		chunk_next = (t_chunk*)chunk->next_chunk;
 		if (chunk_next != NULL && chunk_next->available == TRUE){
-			available_space = (chunk->data_size + 
-                                sizeof(t_chunk) +
+			available_space = (chunk->data_size +
+								ALIGN_UP_SIZE(sizeof(t_chunk), MAL_ALIGN) +
 								chunk_next->data_size);
 
 			if (available_space >= new_size)

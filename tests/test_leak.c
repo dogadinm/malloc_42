@@ -38,7 +38,6 @@ int main(void)
     void *n = realloc(NULL, 256);
     free(n);
 
-    /* --- realloc(ptr, 0) должен вести себя как free --- */
     void *z = malloc(64);
     realloc(z, 0);
 
