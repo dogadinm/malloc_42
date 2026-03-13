@@ -1,6 +1,127 @@
- cc ./test/test12.c libft_malloc.so  -o test12
- LD_LIBRARY_PATH=. valgrind ./test12
+###############################################################################
+#  BUILD
+###############################################################################
+
+# Standard build
+make
+
+# Build with debug symbols (no -Werror)
+make DEBUG=yes
+
+# Full rebuild
+make re
+
+# Clean objects only
+make clean
+
+# Clean everything (objects + library + symlink)
+make fclean
 
 
-# export DYLD_INSERT_LIBRARIES="../libft_malloc.so"
-# export DYLD_FORCE_FLAT_NAMESPACE=1
+###############################################################################
+#  COMPILE A SINGLE TEST
+###############################################################################
+
+# Generic pattern:
+#   cc -Wall -Wextra -I./inc <test.c> ./libft_malloc.so -lpthread -o <binary>
+
+cc -Wall -Wextra -I./inc tests/test0.c         ./libft_malloc.so -lpthread -o /tmp/test0
+cc -Wall -Wextra -I./inc tests/test1.c         ./libft_malloc.so -lpthread -o /tmp/test1
+cc -Wall -Wextra -I./inc tests/test2.c         ./libft_malloc.so -lpthread -o /tmp/test2
+cc -Wall -Wextra -I./inc tests/test3.c         ./libft_malloc.so -lpthread -o /tmp/test3
+cc -Wall -Wextra -I./inc tests/test4.c         ./libft_malloc.so -lpthread -o /tmp/test4
+cc -Wall -Wextra -I./inc tests/test5.c         ./libft_malloc.so -lpthread -o /tmp/test5
+cc -Wall -Wextra -I./inc tests/test_leak.c     ./libft_malloc.so -lpthread -o /tmp/test_leak
+cc -Wall -Wextra -I./inc tests/test_realloc.c  ./libft_malloc.so -lpthread -o /tmp/test_realloc
+cc -Wall -Wextra -I./inc tests/test_coalesce.c ./libft_malloc.so -lpthread -o /tmp/test_coalesce
+cc -Wall -Wextra -I./inc tests/test_threads.c  ./libft_malloc.so -lpthread -o /tmp/test_threads
+cc -Wall -Wextra -I./inc tests/test_show_ex.c  ./libft_malloc.so -lpthread -o /tmp/test_show_ex
+cc -Wall -Wextra -I./inc tests/test_debug.c    ./libft_malloc.so -lpthread -o /tmp/test_debug
+
+
+###############################################################################
+#  RUN A SINGLE TEST (direct link)
+###############################################################################
+
+/tmp/test0
+/tmp/test1
+/tmp/test2
+/tmp/test3
+/tmp/test4
+/tmp/test5
+/tmp/test_leak
+/tmp/test_realloc
+/tmp/test_coalesce
+/tmp/test_threads
+/tmp/test_show_ex
+/tmp/test_debug
+
+
+###############################################################################
+#  RUN WITH LIBRARY INJECTION (no recompile needed)
+###############################################################################
+
+# macOS
+DYLD_INSERT_LIBRARIES=./libft_malloc.so DYLD_FORCE_FLAT_NAMESPACE=1 /tmp/test1
+
+# Linux
+LD_PRELOAD=./libft_malloc.so /tmp/test1
+
+
+###############################################################################
+#  DEBUG ENVIRONMENT VARIABLES
+###############################################################################
+
+# Log every malloc / realloc / free call
+MALLOC_VERBOSE=1 /tmp/test_debug
+
+# Fill freed memory with 0x55 (detect use-after-free)
+MALLOC_SCRIBBLE=1 /tmp/test_debug
+
+# Fill allocated memory with 0xAA (detect use of uninitialised memory)
+MALLOC_PRE_SCRIBBLE=1 /tmp/test_debug
+
+# All three at once
+MALLOC_VERBOSE=1 MALLOC_SCRIBBLE=1 MALLOC_PRE_SCRIBBLE=1 /tmp/test_debug
+
+# Works with any binary, e.g.:
+MALLOC_VERBOSE=1 /tmp/test_realloc
+MALLOC_SCRIBBLE=1 /tmp/test_coalesce
+
+
+###############################################################################
+#  FULL TEST SUITE
+###############################################################################
+
+bash tests/run_test.sh
+
+
+###############################################################################
+#  LEAK CHECK
+###############################################################################
+
+# Run the automated leak check script (macOS: leaks, Linux: valgrind)
+bash tests/run_leak.sh
+
+# macOS — manual leak check on a single binary
+make DEBUG=yes
+cc -g -I./inc tests/test_leak.c ./libft_malloc.so -lpthread -o /tmp/test_leak_dbg
+MallocStackLogging=1 leaks --atExit -- /tmp/test_leak_dbg
+
+# Linux — manual valgrind
+# --pages-as-heap=yes is required: tracks mmap/munmap instead of malloc/free
+make DEBUG=yes
+cc -g -I./inc tests/test_leak.c ./libft_malloc.so -lpthread -o /tmp/test_leak_dbg
+valgrind --leak-check=full --show-leak-kinds=all --pages-as-heap=yes /tmp/test_leak_dbg
+
+
+###############################################################################
+#  INJECT INTO EXISTING PROGRAMS (macOS)
+###############################################################################
+
+DYLD_INSERT_LIBRARIES=./libft_malloc.so DYLD_FORCE_FLAT_NAMESPACE=1 ls
+DYLD_INSERT_LIBRARIES=./libft_malloc.so DYLD_FORCE_FLAT_NAMESPACE=1 MALLOC_VERBOSE=1 ls
+
+# Linux
+LD_PRELOAD=./libft_malloc.so ls
+LD_PRELOAD=./libft_malloc.so MALLOC_VERBOSE=1 ls
