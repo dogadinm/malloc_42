@@ -5,13 +5,8 @@ endif
 NAME = libft_malloc_$(HOSTTYPE).so
 NAME_LINK = libft_malloc.so
 
-# PATH_SRC = ./src/
-
 PATH_INC = ./inc
 
-# PATH_INC_LIBFT = ./libft/includes/
-
-# INCLUDES = -I $(PATH_INC) -I $(PATH_INC_LIBFT)
 INCLUDES = -I $(PATH_INC)
 
 CC = cc
@@ -24,9 +19,7 @@ else
 	LDFLAGS = -shared -lpthread
 endif
 
-# LIBS = -L libft/ -lft
-
-#_____________FILES____________#
+LIBS = -L libft/ -lft
 
 SRC = ./src/malloc.c \
 	./src/relloc.c \
@@ -38,40 +31,24 @@ SRC = ./src/malloc.c \
 	./utilties/utilities_map.c \
 	./utilties/show_alloc_mem.c \
 	./utilties/show_alloc_mem_ex.c \
-	./libft/ft_putstr.c \
-	./libft/ft_putnbr.c \
-	./libft/ft_putchar.c \
-	./libft/ft_puthexa.c \
-	./libft/ft_bzero.c \
-	./libft/ft_memset.c \
-
-
 
 OBJ = $(SRC:.c=.o)
-
-#____________RULES_____________#
 
 .PHONY: clean fclean re test
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	# make -C libft/
-	# $(CC) $(OBJ) -o $(NAME) $(LIBS) $(LDFLAGS)
-	$(CC) $(OBJ) -o $(NAME) $(LDFLAGS)
+	make -C libft/
+	$(CC) $(OBJ) -o $(NAME) $(LIBS) $(LDFLAGS)
 	ln -sf $(NAME) $(NAME_LINK)
-
-#____CLEAN____#
 
 clean:
 	rm -f $(OBJ)
 
-#___FCLEAN___#
-
 fclean: clean
+	make fclean -C libft/
 	rm -f $(NAME)
 	rm -f $(NAME_LINK)
-
-#____RE____#
 
 re: fclean all
